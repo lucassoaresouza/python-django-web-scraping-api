@@ -6,9 +6,9 @@ services:
   web:
     build: .
     command: python3 manage.py runserver 0.0.0.0:8000
-    container_name: web_scraping
+    container_name: web_scraping_api
     volumes:
-      - .:/web_scraping
+      - .:/web_scraping_api
     ports:
       - "8000:8000"
     depends_on:
