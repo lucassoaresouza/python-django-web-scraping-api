@@ -22,5 +22,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     re_path (r'^api-auth/', include('rest_framework.urls')),
     re_path(r'^', include('webapp.urls')),
-    re_path(r'^admin/', admin.site.urls),
 ]
