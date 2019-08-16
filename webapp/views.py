@@ -16,6 +16,7 @@ class WebScrapingView:
         self.setHTMLPage()
         self.setLiProductsTag()
         self.getProductData()
+        self.saveProductData()
 
     def setHTMLPage(self):
         req = requests.get(self.htmlUrl)
@@ -32,23 +33,46 @@ class WebScrapingView:
         else:
             self.htmlLiProductsTag = None
 
+    def getProductName(self,index):
+        name = self.htmlLiProductsTag[index].find("h2",{"class":"woocommerce-loop-product__title"})
+        name = name.next
+        return name
+
+    def getProductPrice(self,index):
+        price = self.htmlLiProductsTag[index].find_all("span",{"class":"woocommerce-Price-amount"})
+        price = price[1].next.next.next
+        price = price.replace(',','.')
+        price = float(price)
+        return price
+
+    def getProductImage(self,index):
+        image = self.htmlLiProductsTag[index].find("img")
+        image = image["src"]
+        return image
+
     def getProductData(self):
         for index in range(len(self.htmlLiProductsTag)):
             if(self.htmlLiProductsTag != None):
-                #get name
-                name = self.htmlLiProductsTag[index].find("h2",{"class":"woocommerce-loop-product__title"})
-                name = name.next
-                #get price
-                price = self.htmlLiProductsTag[index].find_all("span",{"class":"woocommerce-Price-amount"})
-                price = price[1].next.next.next
-                price = price.replace(',','.')
-                price = float(price)
-                #get images
-                image = self.htmlLiProductsTag[index].find("img")
-                image = image["src"]
-                Product.objects.update_or_create(name=name,images=[image],price=price)
+                name = self.getProductName(index=index)
+                price = self.getProductPrice(index=index)
+                image = self.getProductImage(index=index)
+                self.productList.append({
+                                        "name":name,
+                                        "price":price,
+                                        "image":image
+                                        })
             else:
                 return none
+
+    def saveProductData(self):
+        for product in self.productList:
+            if(product != None):
+                Product.objects.update_or_create(
+                                                name=product["name"],
+                                                price=product["price"],
+                                                images=[product["image"]]
+                                                )
+
 
 class ProductList(generics.ListCreateAPIView):
 
