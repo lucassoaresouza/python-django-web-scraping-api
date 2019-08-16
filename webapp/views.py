@@ -9,12 +9,13 @@ class WebScrapingView:
 
     htmlUrl = 'https://nerdstore.com.br/categoria/especiais/game-of-thrones/'
     htmlPage = ''
-    htmlLiProductsTag = ''
+    htmlLiProductsTag = []
     productList = []
 
     def __init__(self):
         self.setHTMLPage()
         self.setLiProductsTag()
+        self.getProductData()
 
     def setHTMLPage(self):
         req = requests.get(self.htmlUrl)
@@ -30,6 +31,24 @@ class WebScrapingView:
             self.htmlLiProductsTag = liTag
         else:
             self.htmlLiProductsTag = None
+
+    def getProductData(self):
+        for index in range(len(self.htmlLiProductsTag)):
+            if(self.htmlLiProductsTag != None):
+                #get name
+                name = self.htmlLiProductsTag[index].find("h2",{"class":"woocommerce-loop-product__title"})
+                name = name.next
+                #get price
+                price = self.htmlLiProductsTag[index].find_all("span",{"class":"woocommerce-Price-amount"})
+                price = price[1].next.next.next
+                price = price.replace(',','.')
+                price = float(price)
+                #get images
+                image = self.htmlLiProductsTag[index].find("img")
+                image = image["src"]
+                Product.objects.update_or_create(name=name,images=[image],price=price)
+            else:
+                return none
 
 class ProductList(generics.ListCreateAPIView):
 
