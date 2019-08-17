@@ -12,18 +12,19 @@ class WebScrapingView:
     htmlLiProductsTag = []
     productList = []
 
-    def __init__(self):
+    def __init__():
         self.setHTMLPage()
         self.setLiProductsTag()
         self.getProductData()
         self.saveProductData()
+        print("ola")
 
     def setHTMLPage(self):
         req = requests.get(self.htmlUrl)
         if(req.status_code == 200):
             self.htmlPage = BeautifulSoup(req.content,'html.parser')
         else:
-            self.htmlPage = None
+            return HttpResponse('<h1>Page not found</h1>')
 
     def setLiProductsTag(self):
         liTag = []
@@ -31,7 +32,7 @@ class WebScrapingView:
         if(liTag != None):
             self.htmlLiProductsTag = liTag
         else:
-            self.htmlLiProductsTag = None
+            return HttpResponse("<h1>Element 'li product' not found</h1>")
 
     def getProductName(self,index):
         name = self.htmlLiProductsTag[index].find("h2",{"class":"woocommerce-loop-product__title"})
@@ -66,16 +67,17 @@ class WebScrapingView:
 
     def saveProductData(self):
         for product in self.productList:
-            if(product != None):
-                Product.objects.update_or_create(
-                                                name=product["name"],
-                                                price=product["price"],
-                                                images=[product["image"]]
-                                                )
+            print(product["name"])
+            print(product["price"])
+            print(product["image"])
+            Product.objects.update_or_create(
+                                            name = product["name"],
+                                            price = product["price"],
+                                            images = product["image"]
+                                            )
 
 
 class ProductList(generics.ListCreateAPIView):
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    scraping = WebScrapingView()

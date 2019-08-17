@@ -9,5 +9,5 @@ class Product(models.Model):
         db_table = 'product'
 
     name = models.CharField(max_length=150)
-    images = ArrayField(models.CharField(max_length=350, blank=True, default=""))
+    images = models.CharField(max_length=350, blank=True, default="")
     price = models.DecimalField(max_digits=6,decimal_places=2)
