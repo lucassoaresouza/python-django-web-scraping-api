@@ -6,6 +6,12 @@ from django.http import HttpResponse
 import requests
 
 # Create your views here.
+
+class ProductList(generics.ListCreateAPIView):
+
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
 class WebScrapingView:
 
     htmlUrl = 'https://nerdstore.com.br/categoria/especiais/game-of-thrones/'
@@ -83,10 +89,3 @@ class WebScrapingView:
                                             images = product["image"]
                                             )
         print("Scraping Finished")
-
-
-class ProductList(generics.ListCreateAPIView):
-
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    scraping = WebScrapingView()
