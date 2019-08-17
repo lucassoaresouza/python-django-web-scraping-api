@@ -2,6 +2,7 @@ from rest_framework import generics
 from .models import Product
 from .serializers import ProductSerializer
 from bs4 import BeautifulSoup
+from django.http import HttpResponse
 import requests
 
 # Create your views here.
@@ -12,17 +13,22 @@ class WebScrapingView:
     htmlLiProductsTag = []
     productList = []
 
-    def __init__():
+    def __init__(self):
         self.setHTMLPage()
         self.setLiProductsTag()
         self.getProductData()
         self.saveProductData()
-        print("ola")
+
+    def scrapingRequest(request):
+        scraping = WebScrapingView()
+        teste = "ola mundo"
+        return HttpResponse("Scraping complete")
 
     def setHTMLPage(self):
         req = requests.get(self.htmlUrl)
         if(req.status_code == 200):
             self.htmlPage = BeautifulSoup(req.content,'html.parser')
+            return HttpResponse('<h1>Page found</h1>')
         else:
             return HttpResponse('<h1>Page not found</h1>')
 
@@ -66,18 +72,21 @@ class WebScrapingView:
                 return none
 
     def saveProductData(self):
+        print("New Scraping")
         for product in self.productList:
-            print(product["name"])
-            print(product["price"])
-            print(product["image"])
+            # print(product["name"])
+            # print(product["price"])
+            # print(product["image"])
             Product.objects.update_or_create(
                                             name = product["name"],
                                             price = product["price"],
                                             images = product["image"]
                                             )
+        print("Scraping Finished")
 
 
 class ProductList(generics.ListCreateAPIView):
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    scraping = WebScrapingView()

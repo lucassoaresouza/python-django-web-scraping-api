@@ -6,5 +6,5 @@ from . import views
 
 urlpatterns = [
     re_path(r'^products/$', views.ProductList.as_view(), name='product-list'),
-    #re_path (r'^sraping/', views.WebScrapingView.WebScrapingRequest(), name='make-scraping')
+    re_path (r'^scraping/', views.WebScrapingView.scrapingRequest, name='make-scraping')
 ]
