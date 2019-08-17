@@ -27,7 +27,16 @@ $ docker-compose -f docker-compose.yml build
 
 ```
 
-A imagem docker será então construída e após o retorno positivo do build execute:
+A imagem docker será então construída e após o retorno positivo do build execute as **migrations** com o comando:
+
+
+```
+
+$ docker-compose run web python3 manage.py migrate
+
+```
+
+Com todos os passos anteriores executados de forma correta execute o comando a seguir para rodar o sistema:
 
 ```
 
@@ -38,13 +47,3 @@ $ docker-compose -f docker-compose.yml up
 Assim serão executados os containers referentes à API e seu banco de dados. Após o retorno positivo deste segundo comando é possível acessar os dados coletados no seguinte link:
 
 * http://localhost:8000/products/?format=json
-
-### Observaçes:
-
-Caso necessário rode todas as **migrations** com o comando:
-
-```
-
-$ docker-compose run web python3 manage.py migrate
-
-```
