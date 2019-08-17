@@ -38,4 +38,4 @@ $ docker-compose -f docker-compose.yml up
 
 Assim serão executados os containers referentes à API e seu banco de dados. Após o retorno positivo deste segundo comando é possível acessar os dados coletados no seguinte link:
 
-* http://localhost:8000/products/
+* http://localhost:8000/products/?format=json
