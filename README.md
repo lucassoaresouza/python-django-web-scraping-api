@@ -44,6 +44,14 @@ $ docker-compose -f docker-compose.yml up
 
 ```
 
+## Json com os Dados:
+
 Assim serão executados os containers referentes à API e seu banco de dados. Após o retorno positivo deste segundo comando é possível acessar os dados coletados no seguinte link:
 
 * http://localhost:8000/products/?format=json
+
+## Novo Scraping
+
+Como também é realizado um novo Scraping todas as vezes em que o seguinte link é acessado:
+
+* http://localhost:8000/scraping/
